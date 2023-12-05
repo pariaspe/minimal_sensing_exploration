@@ -2,8 +2,7 @@
 
 <%
 # Input parameters
-drone_namespace     = @settings["drone_namespace"]
-base_launch         = @settings["base_launch"] == "true"
+drones              = @settings["drones"]
 estimator_plugin    = @settings["estimator_plugin"]
 
 # Other parameters
@@ -15,7 +14,7 @@ elsif estimator_plugin == "raw_odometry"
     platform_config_file = "config/platform_config_flowdeck.yaml"
 end
 
-config_path     = "config"
+config_path          = "config"
 
 %>
 attach: false
@@ -23,40 +22,44 @@ root: ./
 startup_window: alphanumeric_viewer
 windows:
   - alphanumeric_viewer:
-      layout: tiled
+      layout: even-vertical
       panes:
+    <%- drones.split(':').each do |drone| %>
         - ros2 run as2_alphanumeric_viewer as2_alphanumeric_viewer_node
-            --ros-args -r  __ns:=/<%= drone_namespace %>
-    <%- if base_launch %>
+            --ros-args -r  __ns:=/<%= drone %>
+    <%- end %>
   - platform:
-      layout: tiled
       panes:
         - ros2 launch as2_platform_crazyflie crazyflie_swarm_launch.py
             platform_config_file:=<%= platform_config_file %>
-            swarm_config_file:=real_config/swarm_config_file.yaml
-    <%- end %>
+            swarm_config_file:=<%= config_path %>/swarm_config.yaml
   - state_estimator:
-      layout:
+      layout: even-vertical
       panes:
+    <%- drones.split(':').each do |drone| %>
         - ros2 launch as2_state_estimator state_estimator_launch.py
-            namespace:=<%= drone_namespace %>
+            namespace:=<%= drone %>
             use_sim_time:=false
             plugin_name:=<%= estimator_plugin %>
-            plugin_config_file:=<%= config_path %>/<%= drone_namespace %>_state_estimator.yaml
+            plugin_config_file:=<%= config_path %>/<%= drone %>_state_estimator.yaml
+    <%- end %>
   - controller:
-      layout:
+      layout: even-vertical
       panes:
+    <%- drones.split(':').each do |drone| %>
         - ros2 launch as2_motion_controller controller_launch.py
-            namespace:=<%= drone_namespace %>
+            namespace:=<%= drone %>
             use_sim_time:=false
             plugin_name:=pid_speed_controller
             motion_controller_config_file:=<%= config_path %>/motion_controller.yaml
-            plugin_config_file:=<%= config_path %>/motion_controller_plugin.yaml     
+            plugin_config_file:=<%= config_path %>/motion_controller_plugin.yaml
+    <%- end %>
   - behaviors:
-      layout:
+      layout: even-vertical
       panes:
+    <%- drones.split(':').each do |drone| %>
         - ros2 launch as2_behaviors_motion composable_motion_behaviors.launch.py
-            namespace:=<%= drone_namespace %>
+            namespace:=<%= drone %>
             use_sim_time:=false
             follow_path_plugin_name:=follow_path_plugin_<%= behavior_type %>
             go_to_plugin_name:=go_to_plugin_position
@@ -65,38 +68,45 @@ windows:
         <%- if behavior_type == "trajectory" %>
         - ros2 launch as2_behaviors_trajectory_generation composable_generate_polynomial_trajectory_behavior.launch.py
             container:=behaviors
-            namespace:=<%= drone_namespace %>
+            namespace:=<%= drone %>
             use_sim_time:=false && exit
         <%- end %>
-    <%- if base_launch %>
+    <%- end %>
   - rviz:
-      layout:
       panes:
-        - ros2 launch as2_visualization as2_visualization.launch.py
-            namespace:=cf0
-            use_sim_time:=false
-            rviz_config:=rviz/multi_ranger.rviz
-            paint_markers:=false
-  - mission:
-      layout:
+        - rviz2 -d rviz/multi_ranger.rviz
+  - exploration_server:
+      layout: even-vertical
       panes:
-        - ros2 launch as2_path_planning laserscan_to_occupancy_grid.launch.py
-            namespace:=<%= drone_namespace %>
-            use_sim_time:=false
-            config_file:=real_config/exploration.yaml
-            output_topic:=/map_server/input_occupancy_grid
         - ros2 launch as2_path_planning map_server.launch.py
             namespace:=map_server
             use_sim_time:=false
-        - ros2 launch as2_path_planning path_planner.launch.py
-            namespace:=<%= drone_namespace %>
-            use_sim_time:=false
-            config_file:=real_config/exploration.yaml
-        - ros2 launch as2_path_planning explorer.launch.py
-            namespace:=<%= drone_namespace %>
-            use_sim_time:=false
-            config_file:=real_config/exploration.yaml
+            config_file:=<%= config_path %>/exploration.yaml
         - ros2 launch as2_path_planning frontier_allocator.launch.py
             use_sim_time:=false
-            config_file:=real_config/exploration.yaml
+            config_file:=<%= config_path %>/exploration.yaml
+        # - ros2 launch as2_path_planning safeguard.launch.py
+        #     use_sim_time:=false
+        #     config_file:=<%= config_path %>/exploration.yaml
+  <%- drones.split(':').each do |drone| %>
+  - explorer_<%= drone %>:
+      layout: even-vertical
+      panes:
+        - ros2 launch as2_path_planning laserscan_to_occupancy_grid.launch.py
+            namespace:=<%= drone %>
+            use_sim_time:=false
+            config_file:=<%= config_path %>/exploration.yaml
+            output_topic:=/map_server/input_occupancy_grid
+        - ros2 launch as2_path_planning path_planner.launch.py
+            namespace:=<%= drone %>
+            use_sim_time:=false
+            config_file:=<%= config_path %>/exploration.yaml
+        - ros2 launch as2_path_planning explorer.launch.py
+            namespace:=<%= drone %>
+            use_sim_time:=false
+            config_file:=<%= config_path %>/exploration.yaml
     <%- end %>
+  - evaluator:
+      panes:
+        - python scripts/evaluate.py -s
+        - 
