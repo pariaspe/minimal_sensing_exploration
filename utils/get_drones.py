@@ -25,6 +25,7 @@ def get_drones_list(filename: str) -> list[str]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("config_file", help="Path to swarm config file")
+    parser.add_argument("--sep", help="Separator", default=":")
     args = parser.parse_args()
     drones = get_drones_list(args.config_file)
-    print(":".join(drones))
+    print(args.sep.join(drones))

@@ -58,9 +58,11 @@ if [[ ${record_rosbag} == "true" ]]; then
 fi
 
 if [[ ${launch_keyboard_teleop} == "true" ]]; then
-  tmuxinator start -n keyboard_teleop -p tmuxinator/keyboard_teleop.yml drone_namespace=${drones} &
+  # TODO: Keyboard Teleop uses ',' as separator for drone namespaces
+  drones_sep=$(python utils/get_drones.py config/swarm_config.yaml --sep ",")
+  tmuxinator start -n keyboard_teleop -p tmuxinator/keyboard_teleop.yml drone_namespace=${drones_sep} &
   wait
 fi
 
-# Attach to tmux session ${drone_ns[@]}, window 0
-tmux attach-session -t aerostack2:exploration_server
+# Attach to tmux session aerostack2, window 0
+tmux attach-session -t aerostack2:alphanumeric_viewer
