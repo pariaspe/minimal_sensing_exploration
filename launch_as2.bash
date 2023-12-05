@@ -49,7 +49,7 @@ drones=$(python utils/get_drones.py config/swarm_config.yaml)
 #   wait
 # fi
 
-tmuxinator start -n aerostack2 -p tmuxinator/session.yml drones=${drones} estimator_plugin=${estimator_plugin} &
+tmuxinator start -n aerostack2 -p tmuxinator/aerostack2.yml drones=${drones} estimator_plugin=${estimator_plugin} &
 wait
 
 if [[ ${record_rosbag} == "true" ]]; then
