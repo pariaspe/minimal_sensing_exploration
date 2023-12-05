@@ -1,0 +1,6 @@
+/**:
+  mocap_vicon_driver_node:
+    ros__parameters:
+      stream_mode: "ClientPull"
+      host_name: "10.121.10.12:801"
+      frame_id: "earth"

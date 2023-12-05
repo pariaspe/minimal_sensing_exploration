@@ -1,0 +1,29 @@
+/**:
+    # Using broad URI to share common parameters
+    ros__parameters:
+        use_sim_time: false
+
+        # Scan2Grid parameters
+        map_resolution: 0.1
+        map_width: 80
+        map_height: 80
+        max_range_limit: 2.0
+
+        # PathPlanner parameters
+        use_path_optimizer: false
+        safety_distance: 0.25
+
+        # Explorer parameters
+        reached_dist_thresh: 0.2
+        navigation_speed: 0.75
+        # safety_distance: 0.25
+        cautiously: true
+        spin_speed: 0.1
+
+        # FrontierAllocator parameters
+        frontier_min_area: 15
+        frontier_max_area: 35
+        # safety_distance: 0.25
+
+        # Safeguard
+        drone_safety_distance: 1.0
