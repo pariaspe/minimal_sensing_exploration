@@ -11,5 +11,5 @@ windows:
         #     config_file:=real_config/mocap_optitrack.yaml
         - ros2 launch mocap_vicon_driver mocap_vicon_driver_launch.py 
             namespace:=vicon
-            config_file:=real_config/mocap_vicon.yaml
+            config_file:=config/mocap_vicon.yaml
         - sleep 1; ros2 lifecycle set /vicon/mocap_vicon_driver_node activate; ros2 topic echo /rigid_bodies
