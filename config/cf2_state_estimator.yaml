@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    use_ignition_tf: False
+    rigid_body_name: "cf2.cf2"
+    mocap_topic: "/rigid_bodies"
+    twist_smooth_filter_cte: 0.1
+    orientation_smooth_filter_cte: 0.1
