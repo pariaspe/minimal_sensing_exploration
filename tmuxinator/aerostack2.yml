@@ -6,7 +6,6 @@ drones              = @settings["drones"]
 estimator_plugin    = @settings["estimator_plugin"]
 
 # Other parameters
-behavior_type       = "position"
 
 if estimator_plugin == "mocap_pose"
     platform_config_file = "config/platform_config_mocap.yaml"
@@ -61,16 +60,14 @@ windows:
         - ros2 launch as2_behaviors_motion composable_motion_behaviors.launch.py
             namespace:=<%= drone %>
             use_sim_time:=false
-            follow_path_plugin_name:=follow_path_plugin_<%= behavior_type %>
+            follow_path_plugin_name:=follow_path_plugin_trajectory
             go_to_plugin_name:=go_to_plugin_position
             takeoff_plugin_name:=takeoff_plugin_position
             land_plugin_name:=land_plugin_speed
-        <%- if behavior_type == "trajectory" %>
         - ros2 launch as2_behaviors_trajectory_generation composable_generate_polynomial_trajectory_behavior.launch.py
             container:=behaviors
             namespace:=<%= drone %>
             use_sim_time:=false && exit
-        <%- end %>
     <%- end %>
   - rviz:
       panes:
@@ -85,9 +82,9 @@ windows:
         - ros2 launch as2_path_planning frontier_allocator.launch.py
             use_sim_time:=false
             config_file:=<%= config_path %>/exploration.yaml
-        # - ros2 launch as2_path_planning safeguard.launch.py
-        #     use_sim_time:=false
-        #     config_file:=<%= config_path %>/exploration.yaml
+        - ros2 launch as2_path_planning safeguard.launch.py
+            use_sim_time:=false
+            config_file:=<%= config_path %>/exploration.yaml
   <%- drones.split(':').each do |drone| %>
   - explorer_<%= drone %>:
       layout: even-vertical
