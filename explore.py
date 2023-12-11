@@ -116,10 +116,10 @@ if __name__ == '__main__':
     scouts: list[Explorer] = []
     scouts.append(Explorer(drone_id="cf0",
                   verbose=False, use_sim_time=True))
-    # scouts.append(Explorer(drone_id="cf1",
-    #               verbose=False, use_sim_time=True))
-    # scouts.append(Explorer(drone_id="cf2",
-    #               verbose=False, use_sim_time=True))
+    scouts.append(Explorer(drone_id="cf1",
+                  verbose=False, use_sim_time=True))
+    scouts.append(Explorer(drone_id="cf2",
+                  verbose=False, use_sim_time=True))
 
     # Only keep connected drones
     for scout in scouts.copy():
