@@ -32,7 +32,9 @@ class PlottingData:
             self.occ_grid.header.stamp.nanosec * 1e-9
 
     def __str__(self) -> str:
-        return f"[{self.timestamp}] Explored {round(self.explored_area, 2)} m2 ({round(self.explored_percent, 2)}%) paths={self.paths})"
+        ret = f"[{self.timestamp}] Explored {round(self.explored_area, 2)} m2 "
+        ret += f"({round(self.explored_percent, 2)}%) paths={self.paths})"
+        return ret
 
     @property
     def timestamp(self) -> str:
@@ -309,7 +311,7 @@ if __name__ == "__main__":
 
     # FIXME: bag_writer not working with rclpy.spin in thread, joining?
     if args.plot_data:
-        vis = Visualizer(area_max=400)
+        vis = Visualizer(area_max=64)
         ani = animation.FuncAnimation(vis.fig, vis.update_plot, evaluator.yield_viz,
                                       interval=1000, init_func=vis.init_plot)
 
