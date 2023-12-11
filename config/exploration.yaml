@@ -15,6 +15,7 @@
 
         # Explorer parameters
         reached_dist_thresh: 0.2
+        spin_yaw_thresh: 0.15
         navigation_speed: 0.75
         # safety_distance: 0.25
         cautiously: true
