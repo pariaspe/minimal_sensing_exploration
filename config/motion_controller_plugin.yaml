@@ -71,6 +71,6 @@
       reset_integral: false
       antiwindup_cte : 1.0
       alpha: 0.3
-      kp: 1.0
+      kp: 0.5
       kd: 0.001
       ki: 0.0
