@@ -14,6 +14,11 @@ tmuxinator start -n mocap -p tmuxinator/mocap.yml
 ./launch_as2.bash -e mocap_pose -r -t
 ```
 
+### Launch exploration
+```bash
+python explore.py
+```
+
 ## How to stop
 ```bash
 ./stop.bash
