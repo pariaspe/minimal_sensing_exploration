@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
 fi
 
 # Make a tmux list of sessions to be killed
-tmux_session_list=("aerostack2" "keyboard_teleop" "rosbag" "mocap" "gazebo")
+tmux_session_list=("aerostack2" "keyboard_teleop" "rosbag" "mocap" "gazebo" "cf1" "cf2")
 
 # For each drone namespace, add to the list
 for ns in "$@"; do
