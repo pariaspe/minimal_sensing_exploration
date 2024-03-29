@@ -162,3 +162,5 @@ cython_debug/
 
 # Rosbags
 rosbags/*
+
+log*.csv
