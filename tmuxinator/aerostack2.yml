@@ -105,5 +105,5 @@ windows:
     <%- end %>
   - evaluator:
       panes:
-        - python evaluate.py
+        - python scripts/evaluate.py
         - 
