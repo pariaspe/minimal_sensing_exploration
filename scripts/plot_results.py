@@ -5,6 +5,7 @@ plot_results.py
 from pathlib import Path
 from world_visualizer import WorldFigure, Pose2D, zenithal_view
 from viz_evaluation import LogData, plot_area, plot_total_path, plot_path, plot_area_with_error
+from overlap import total_overlap_ratio
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -61,11 +62,11 @@ def experiments_one_drone():
             "rosbags/experiment_3a",  # Obstacle configuration C
             "rosbags/experiment_4a",  # Obstacle configuration D, starting point X
             "rosbags/experiment_5a",  # Obstacle configuration D, starting point Y
-            "rosbags/experiment_6a_edit",  # Obstacle configuration D, starting point Z
-            "rosbags/experiment_7a_edit",  # Obstacle configuration D, starting point Z, repeat 2
-            "rosbags/experiment_8a_edit",  # Obstacle configuration D, starting point Z, repeat 3
-            "rosbags/experiment_9a_edit",  # Obstacle configuration D, starting point Z, repeat 4
-            "rosbags/experiment_10a_edit"  # Obstacle configuration D, starting point Z, repeat 5
+            "rosbags/experiment_6a",  # Obstacle configuration D, starting point Z
+            "rosbags/experiment_7a",  # Obstacle configuration D, starting point Z, repeat 2
+            "rosbags/experiment_8a",  # Obstacle configuration D, starting point Z, repeat 3
+            "rosbags/experiment_9a",  # Obstacle configuration D, starting point Z, repeat 4
+            "rosbags/experiment_10a"  # Obstacle configuration D, starting point Z, repeat 5
             ]
 
     poles = []
@@ -232,10 +233,12 @@ def print_stats(label: str, experiments: dict[str, LogData]):
     ts = []
     area_pct = []
     path_length = []
+    overlap_ratio = []
     for k, v in experiments.items():
         ts.append(v.timestamps[-1])
         area_pct.append(v.area_pct[-1])
         path_length.append(v.total_path[-1])
+        overlap_ratio.append(total_overlap_ratio(k))
 
     ts_mean = np.mean(ts)
     ts_std = np.std(ts)
@@ -243,20 +246,24 @@ def print_stats(label: str, experiments: dict[str, LogData]):
     area_pct_std = np.std(area_pct)
     path_length_mean = np.mean(path_length)
     path_length_std = np.std(path_length)
+    overlap_ratio_mean = np.mean(overlap_ratio)
+    overlap_ratio_std = np.std(overlap_ratio)
     print(f"\nStats for {label}")
     print(f"Timestamps mean: {ts_mean:.2f} std: {ts_std:.2f}")
     print(f"Area mean: {area_pct_mean:.2f} std: {area_pct_std:.2f}")
     print(
-        f"Path length mean: {path_length_mean:.2f} std: {path_length_std:.2f}\n")
+        f"Path length mean: {path_length_mean:.2f} std: {path_length_std:.2f}")
+    print(
+        f"Overlap ratio mean: {overlap_ratio_mean:.2f} std: {overlap_ratio_std:.2f}\n")
 
 
 def experiment_number_drones_analisys():
     """ Experiment number of drones analisys """
-    one_drone_bags = ["rosbags/experiment_6a_edit",
-                      "rosbags/experiment_7a_edit",
-                      "rosbags/experiment_8a_edit",
-                      "rosbags/experiment_9a_edit",
-                      "rosbags/experiment_10a_edit"
+    one_drone_bags = ["rosbags/experiment_6a",
+                      "rosbags/experiment_7a",
+                      "rosbags/experiment_8a",
+                      "rosbags/experiment_9a",
+                      "rosbags/experiment_10a"
                       ]
     two_drones_bags = ["rosbags/experiment_11a",
                        #    "rosbags/experiment_11b",  # noisy
@@ -315,7 +322,7 @@ if __name__ == "__main__":
     # experiment_diff_starting_points()
     # experiments_two_drones()
     # experiments_three_drones()
-    # experiment_number_drones_analisys()
+    experiment_number_drones_analisys()
     # one_drone_zenithal_view()
     # two_drone_zenithal_view()
-    three_drone_zenithal_view()
+    # three_drone_zenithal_view()
