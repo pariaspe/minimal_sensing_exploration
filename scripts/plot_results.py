@@ -3,7 +3,7 @@ plot_results.py
 """
 
 from pathlib import Path
-from world_visualizer import WorldFigure, Pose2D
+from world_visualizer import WorldFigure, Pose2D, zenithal_view
 from viz_evaluation import LogData, plot_area, plot_total_path, plot_path, plot_area_with_error
 import matplotlib.pyplot as plt
 import numpy as np
@@ -295,28 +295,18 @@ def experiment_number_drones_analisys():
 
 
 def one_drone_zenithal_view():
-    """ Experiment repetition analisys """
-    bags = [
-        "rosbags/experiment_8a_edit",
-    ]
-    colors = ['b', 'g', 'c', 'm', 'y', 'k', 'w']
+    """ One drone zenithal view """
+    zenithal_view('rosbags/experiment_8a', world_d())
 
-    poles = world_d()
-    drones: dict[str, Pose2D] = {"cf0": (-3.6, -2.1)}
 
-    fig = WorldFigure("One Drone Exploration, different executions", 4.0)
-    fig.draw_drones(drones, color='bD')
-    fig.draw_obstacles(poles)
+def two_drone_zenithal_view():
+    """ Two drone zenithal view """
+    zenithal_view("rosbags/experiment_13a", world_d())
 
-    used_colors = colors[:len(bags)]
-    for rosbag, c in zip(bags, used_colors):
-        data = LogData.from_rosbag(rosbag)
-        fig.draw_paths(data.poses, c)
 
-    fig.show_legend()
-
-    plot_stats(bags)
-    fig.show()
+def three_drone_zenithal_view():
+    """ Three drone zenithal view """
+    zenithal_view("rosbags/experiment_16", world_d())
 
 
 if __name__ == "__main__":
@@ -326,4 +316,6 @@ if __name__ == "__main__":
     # experiments_two_drones()
     # experiments_three_drones()
     # experiment_number_drones_analisys()
-    one_drone_zenithal_view()
+    # one_drone_zenithal_view()
+    # two_drone_zenithal_view()
+    three_drone_zenithal_view()
