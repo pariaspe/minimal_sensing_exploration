@@ -1,0 +1,43 @@
+# ~/.tmuxinator/playback.yml
+
+<%
+# Input parameters
+drones              = @settings["drones"]
+estimator_plugin    = @settings["estimator_plugin"]
+
+# Other parameters
+
+if estimator_plugin == "mocap_pose"
+    platform_config_file = "config/platform_config_mocap.yaml"
+elsif estimator_plugin == "raw_odometry"
+    platform_config_file = "config/platform_config_flowdeck.yaml"
+end
+
+config_path          = "config"
+
+%>
+attach: false
+root: ./
+name: playback
+startup_window: rosbag_playback
+windows:
+  - rosbag_playback:
+      layout: even-vertical
+      panes:
+        - ros2 bag play rosbags/rosbag2_2023_12_14-10_44_57 -p
+        - rviz2 -d rviz/multi_ranger.rviz
+  - as2_viz:
+      panes:
+        - ros2 launch as2_visualization as2_visualization.launch.py
+            rviz:=false
+            paint_markers:=false
+            namespace:=cf0
+        - ros2 launch as2_visualization as2_visualization.launch.py
+            rviz:=false
+            paint_markers:=false
+            namespace:=cf1
+        - ros2 launch as2_visualization as2_visualization.launch.py
+            rviz:=false
+            paint_markers:=false
+            namespace:=cf2
+
