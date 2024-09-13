@@ -304,25 +304,34 @@ def experiment_number_drones_analisys():
 def one_drone_zenithal_view():
     """ One drone zenithal view """
     zenithal_view('rosbags/experiment_8a', world_d())
+    print_stats('1 drone', {'rosbags/experiment_8a': LogData.from_rosbag('rosbags/experiment_8a')})
 
 
 def two_drone_zenithal_view():
     """ Two drone zenithal view """
     zenithal_view("rosbags/experiment_13a", world_d())
+    print_stats(
+        '2 drones', {'rosbags/experiment_13a': LogData.from_rosbag('rosbags/experiment_13a')})
 
 
 def three_drone_zenithal_view():
     """ Three drone zenithal view """
     zenithal_view("rosbags/experiment_16", world_d())
+    print_stats(
+        '3 drones', {'rosbags/experiment_16': LogData.from_rosbag('rosbags/experiment_16')})
 
 
 if __name__ == "__main__":
+    import os
+    if not os.path.exists("rosbags"):
+        print("rosbags directory not found.")
+        exit()
     # experiments_one_drone()
     # experiment_one_drone_repetition_analisys()
     # experiment_diff_starting_points()
     # experiments_two_drones()
     # experiments_three_drones()
-    experiment_number_drones_analisys()
-    # one_drone_zenithal_view()
-    # two_drone_zenithal_view()
-    # three_drone_zenithal_view()
+    # experiment_number_drones_analisys()
+    one_drone_zenithal_view()
+    two_drone_zenithal_view()
+    three_drone_zenithal_view()
