@@ -1,12 +1,16 @@
 # Exploring Unstructured Environments using Minimal Sensing on Cooperative Nano-Drones
-If you use this code in your academic work, please cite ([PDF](https://doi.org/10.48550/arXiv.2407.06706)):
+If you use this code in your academic work, please cite ([PDF](https://doi.org/10.1109/LRA.2024.3486212)):
 
 ```latex
 @article{arias2024exploring,
   title={Exploring Unstructured Environments using Minimal Sensing on Cooperative Nano-Drones},
   author={Arias-Perez, Pedro and Gautam, Alvika and Fernandez-Cortizas, Miguel and Perez-Saura, David and Saripalli, Srikanth and Campoy, Pascual},
-  journal={arXiv preprint arXiv:2407.06706},
+  journal={IEEE Robotics and Automation Letters}, 
   year={2024}
+  volume={9},
+  number={12},
+  pages={11202-11209},
+  doi={10.1109/LRA.2024.3486212}
 }
 ```
 
